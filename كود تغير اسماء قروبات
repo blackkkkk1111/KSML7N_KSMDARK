@@ -1,0 +1,315 @@
+const token = ""; // توكنك
+
+const groupName = ""; 
+
+const targetChannels = [
+"" 
+
+]; // قنوات المستهدفه
+
+class DiscordGroupManager {
+
+  constructor(token, groupName, targetChannels) {
+
+    this.token = token;
+
+    this.groupName = groupName;
+
+    this.targetChannels = targetChannels;
+
+    this.counter = 1;
+
+    const Bottleneck = require('bottleneck');
+
+    this.limiter = new Bottleneck({
+
+      minTime: 50,
+
+      maxConcurrent: 1
+
+    });
+
+    const Eris = require('eris');
+
+    this.bot = new Eris(token);
+
+    this.nextGroupNumbers = {};
+
+    targetChannels.forEach(channelId => {
+
+      this.nextGroupNumbers[channelId] = 1;
+
+    });
+
+    // تسجيل احداث
+
+    this.bot.on('ready', () => {
+
+      console.log(`Logged in as ${this.bot.user.username}#${this.bot.user.discriminator}`);
+
+    });
+
+    // استماع لارسايل جديده
+
+    this.bot.on('messageCreate', (msg) => {
+
+      if (msg.content === '!status') {
+
+        this.bot.createMessage(msg.channel.id, 'ksm l7n!!');
+
+      }
+
+    });
+
+    this.bot.connect();
+
+  }
+
+  // اعادة محاولة اكثر من مره
+
+  async changeChannelName(channelId, newGroupName) {
+
+    let attempts = 0;
+
+    const maxAttempts = 5;
+
+    while (attempts < maxAttempts) {
+
+      try {
+
+        await this.limiter.schedule(() => this.bot.editChannel(channelId, { name: newGroupName }));
+
+        console.log(`Changed group name of channel ${channelId} to: ${newGroupName}`);
+
+        return;
+
+      } catch (error) {
+
+        attempts++;
+
+        console.error(`Error changing name for channel ${channelId}: ${error.message}`);
+
+        if (error.message.includes('429')) {
+
+          console.error('Rate limit exceeded. Waiting for 6s.');
+
+          await new Promise(resolve => setTimeout(resolve, 6000)); // توقف لفتره عند حدوث خطأ
+
+        }
+
+        if (attempts < maxAttempts) {
+
+          console.log(`Retrying (${attempts}/${maxAttempts}) to change group name for channel ${channelId}`);
+
+        } else {
+
+          console.error(`All attempts failed for changing group name of channel ${channelId}`);
+
+        }
+
+      }
+
+    }
+
+  }
+
+  async changeChannelsPeriodically() {
+
+    let currentChannelIndex = 0; 
+
+    // يتم تخطي قروب الاخر بعدما تم تغير اسم قروب
+
+    while (true) {
+
+      const channelId = this.targetChannels[currentChannelIndex];
+
+      const newGroupName = `${this.groupName} ${this.nextGroupNumbers[channelId]}`;
+
+      await this.changeChannelName(channelId, newGroupName);
+
+      
+
+      this.nextGroupNumbers[channelId]++;
+
+      
+
+      // ترقيم من 1 الى 200
+
+      if (this.nextGroupNumbers[channelId] > 200) {
+
+        this.nextGroupNumbers[channelId] = 1;
+
+      }
+
+      // الانتقال إلى القروب التالي في القائمة
+
+      currentChannelIndex = (currentChannelIndex + 1) % this.targetChannels.length;
+
+      await new Promise(resolve => setTimeout(resolve, 1000)); // تحكم في سرعة اسم قروب
+
+    }
+
+  }
+
+  async changeGroupName(channelId) {
+
+    try {
+
+      const newGroupNumber = this.nextGroupNumbers[channelId];
+
+      const newGroupName = `${this.groupName} ${newGroupNumber}`;
+
+      const axios = require('axios');
+
+      const url = `https://discord.com/api/v10/channels/${channelId}`;
+
+      const headers = {
+
+        'Authorization': token,
+
+        'Content-Type': 'application/json'
+
+      };
+
+      const payload = { name: newGroupName };
+
+      const response = await axios.patch(url, payload, { headers });
+
+      if (response.status === 200) {
+
+        console.log(`Room ${channelId} name changed to ${newGroupName}`);
+
+      } else {
+
+        console.log(`Error changing room ${channelId} name: ${response.status}`);
+
+      }
+
+      // تتحكم في ترقيم قروبات
+
+      this.nextGroupNumbers[channelId]++;
+
+      if (this.nextGroupNumbers[channelId] > 200) {
+
+        this.nextGroupNumbers[channelId] = 1;
+
+      }
+
+    } catch (error) {
+
+      if (error.response && error.response.status === 429) {
+
+        const retryAfter = error.response.headers['retry-after'];
+
+        console.log(`Failed to change room ${channelId} name due to rate limits. Retrying after ${retryAfter} seconds.`);
+
+        await new Promise(resolve => setTimeout(resolve, (retryAfter + 1) * 1000));
+
+      } else {
+
+        console.log(`Error: ${error}`);
+
+      }
+
+    }
+
+  }
+
+  async run() {
+
+    await this.changeChannelsPeriodically();
+
+  }
+
+  startWebServer() {
+
+    const express = require('express');
+
+    const http = require('http');
+
+    const app = express();
+
+    const port = 8080;
+
+    app.listen(port, () => console.log('i!!m Ready nik ksm l7n..24H!'));
+
+    app.get("/", (req, res) => {
+
+    res.send(`
+
+  <body>
+
+    <center><h1>كسختو لحن</h1></center>
+
+  </body>`);
+
+});
+     
+  const server = http.createServer((req, res) => {
+
+  res.setHeader('Content-Type', 'text/html');
+
+  res.end(`
+
+    <html>
+
+      <head>
+
+        <title>كسختو دارك</title>
+
+      </head>
+
+      <body style="margin: 0; padding: 0;">
+
+        <iframe width="100%" height="100%" src="https://axocoder.vercel.app/" frameborder="0" allowfullscreen></iframe>
+
+      </body>
+
+    </html>`);
+
+});
+  server.listen(3000, () => {
+  console.log('I!!m ready nik ksm l7n..24H!!');
+}); 
+  
+
+
+    
+  } 
+
+  keepAlive() {
+
+    setInterval(() => {
+
+      console.log("The application is active and running...");
+
+    }, 300000);
+
+  }
+
+  async monitorTime() {
+
+    setInterval(() => {
+
+      const now = new Date();
+
+      console.log(now.toLocaleTimeString());
+
+    }, 1000);
+
+  }
+
+}
+
+module.exports = DiscordGroupManager;
+
+const manager = new DiscordGroupManager(token, groupName, targetChannels);
+
+manager.run();
+
+manager.startWebServer();
+
+manager.keepAlive();
+
+manager.monitorTime();
+
