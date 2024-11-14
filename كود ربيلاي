@@ -1,0 +1,726 @@
+const mytoken = [
+
+  "" 
+
+];// وضع توكنك
+
+const targetUsers = [
+
+  "" 
+
+];// مستهدفين
+
+const targetChannels = [
+
+  "" 
+
+];// قنوات مستهدفه
+
+const delayBetweenReplies = 200; 
+
+//تحكم في سرعة ارسال ردود
+
+const randomReplies = [
+
+'اشق كسعرضمك', 
+
+'كس اختك', 
+
+'كس امك','يبن العواهر', 
+
+'رجلي بكسمك', 
+
+'زبي فيكسختك','افتتاااح امك', 
+
+'تبخير شرفك', 
+
+'كس اهلك',
+
+'مضاجعة عرضك', 
+
+'اغتصاب شرفك', 
+
+'كسم شرفك با ولد القحبه', 
+
+'ضربمك', 
+
+'يين لقحبه', 'سدحمك',
+
+'كس عشريتمك', 
+
+'تفتيحمك', 'تلطشيمك',
+
+'اصتياد كسمج بلمرصد', 
+
+'اضرب امج بمطوة', 
+
+'اعطاا لامج المؤوى', 
+
+'خنق كسمك',
+
+'يلعن كسختك',
+
+'يبن الدياثة',
+
+'اخزوق كسمج',
+
+'تطشير عرضج', 
+
+'توسيخ مهبل امك', 
+
+'لهو بصدر امك', 
+
+'اغتصاب عشيرتك', 
+
+'رسسسسسسميا موت امك', 
+
+' اختراق امك', 
+
+'كسمين اصلك', 
+
+'احرق كسمك', 
+
+'فرع كسختك', 
+
+'يبنت الهروبية', 
+
+'افجر طرمة امك', 
+
+'دعس كسمين امك', 
+
+'انيك اهلك', 
+
+'نكح امك لدرجة صراخ', 
+
+'اطشر عرضج', 
+
+'يبن السكس', 
+
+'الاعتداء على امج', 
+
+'يبن المشلولة', 
+
+'لنكح امك يبن المفتوحة', 
+
+'يبن الشرموطة', 
+
+'انيج امك تالممات', 
+
+'قصف كسمج', 
+
+'تدمير كسمج', 
+
+'قتل امج', 
+
+'نيج كسمج فجأوة',
+
+'سحب سحبتين وانيج اصلج فمرتين',
+
+'زبي بكسم اصلك',
+
+'للف عيري بكسمك ياولد جرار', 
+
+'يولد الاموره اخلي كسمك ايقاع وطرب',
+
+'افتح كسختك', 
+
+'تم نتهاك شرفمج', 
+
+'نكت امج', 
+
+'زبي ينتصب بكسمك', 
+
+'تصليخمك', 
+
+'صفع طيزختك', 
+
+'اسدح اختك', 
+
+'يبن المفتوحة', 
+
+'كسختك بزبي', 
+
+'فشخ امك', 
+
+'اقتلاع مصارين امك', 
+
+'ياولد جرار كسمك يبيله عير فرار', 
+
+'ادعس شرفك', 
+
+'تطويع امج اافضاء', 
+
+'تقطيع أحشاء امك واكلها', 
+
+'تهكير كسمج', 
+
+'اسقاط امك جثة هامدة', 
+
+'تخوير امك', 
+
+'يبن المربوطة', 
+
+'بعص امج الزانية', 
+
+'تفخير كسمج', 
+
+'نيج امواتج',
+
+'وو جنون امك', 
+
+'هدم كسمج بمطرقة',
+
+'توسيع كسمك',
+
+'اعدام كسختك',
+
+ 'اسدح اختك',
+
+ 'كسمج الاسود',
+
+ 'كسشرف اهلك',
+
+ 'تقطيع امج شلالال',
+
+ 'يبن القحبة',
+
+ 'تلطشيختك',
+
+ 'تطهير كسمج', 
+
+ 'ادحش بطيز امج العتتاد', 
+
+ 'تخنثير كسمج', 
+
+ 'ظهوى عيات ع امك من كثر تكفيات', 
+
+'تقتيش كسختك',
+
+'بشلع شرفك',
+
+'شلع جلدمك',
+
+'تطبيشط كسختك', 
+
+'سرقة احشاء كسمج وبيعهااا لزبائن', 
+
+'لكممك', 
+
+'فرك زبي لكسمك',
+
+'يبن المتشردة',
+
+'خربشة كسمك',
+
+'اثرم لحممك',
+
+'اغتصاب شرف اهلك',
+
+'تحريف كسمك بزبي',
+
+'احشي بكسمك عيور فتاكة',
+
+'انيج شرفج', 
+
+'افتح صرم امك', 
+
+'تحطيم جمجمة امك', 
+
+'كسخواتمك','يخو القحبة',
+
+'شطر كسختك',
+
+'ذبحمك','ارتعاب امج', 
+
+'اغتيال امج بقناص',
+
+'قعر امج',
+
+'قرع كسختك',
+
+'قلع احشاء كسمك',
+
+ 'يا ولد لقحاب',
+
+'شطر كسمك لانصاف', 
+
+'التحرش بامج', 
+
+'هروب كسمك', 
+
+'مضاجعة قبيلتك',
+
+'تصفيق ترمة امك البيضاء', 
+
+'تدمير كسمج', 
+
+'ذوبان امك فوق زبي', 
+
+'تخوير امك', 
+
+'يبنت المسدوحة', 
+
+'قص مهبل امك', 
+
+'موت امك بطريقة بشعة', 
+
+'شرف امك على شفير الموت', 
+
+'اخلاء امك', 
+
+'حرق جثمان امج', 
+
+'تعذيب امك',
+
+'يخو لدعارة',
+
+'اعطااا لشرفج المؤى',
+
+'صفج كسمك',
+
+'كس ربمك',
+
+'نيك اختك',
+
+'يبن لفرخة',
+
+'نيك كسمك',
+
+'تهكير كسمج',
+
+'انتهاك كسمك',
+
+'نيكعرضك', 'نيكشرفك',
+
+'تديث كسمك',
+
+'صربمك',
+
+'قطعمك',
+
+'شخلمك',
+
+'اشلل كسمك بزبي',
+
+'تسيحر كسختك',
+
+'افنش كسمك',
+
+'بعص كسختك',
+
+'محاولان امج اليأسه ',
+
+'انتحار كسمج',
+
+'انفجاع كسختك',
+
+'فضح اختج',
+
+'يلعن كس اصلك',
+
+'فتح امج بطوف',
+
+'قشع كسختك',
+
+'ونكت اصلك با ولد الممحونة',
+
+'شق راسمج بالفأس',
+
+'يبن المفتوحة',
+
+'فقرعت امج',
+
+'افجر كسمك',
+
+'رسسسسسسسسسسسسسسميا تم نيك امك',
+
+'انشطار امج رسميا',
+
+'بين بنت الهيك والنيك البتترفع ع الكوريك',
+
+' امك تتناك مليون مرة باليوم',
+
+'تزوير زبي و دخول نسخته بكسختج',
+
+'يبن الحازقة',
+
+'انيج كساسة اصلك',
+
+',عدم شرفج',
+
+'ناكو امك فجأتا!!!',
+
+'كسمين عشيرتمك',
+
+'موت امك فوق زبي بي خطاء',
+
+'تقبمك', 
+
+'ادخال عيري ببطء فكسمك',
+
+'نيك امج بعمارة',
+
+'اشقلم امج',
+
+'يبن العاريه',
+
+'هبوط طيزمك فوق زبي',
+
+' ضرب طيزختك بسرعة فلاش',
+
+'نكح امك بالبئر',
+
+'انيج امك بالمأوى',
+
+'احلق بكسمج في سماء',
+
+'نحر كسختك',
+
+'تصليخمك',
+
+ 'لعنمك',
+
+'تشيمم امك',
+
+'نيجهتك',
+
+'نيج امواتج',
+
+'يين لزواني',
+
+'يبن المخانيث',
+
+'اذهل راسمك',
+
+'دهن طيزختك',
+
+'يين لشرموطة',
+
+'هحط زبي بكس نسلك',
+
+'ننهش كسمك',
+
+'صعقمك',
+
+'سحقمك',
+
+'شقمك','خطف كسمك', 
+
+'تخضيع كسختج',
+
+'فتحمك',
+
+'كسعرضك',
+
+'يبن المناكيح',
+
+'سحلمك',
+
+'شحط كسختك',
+
+'يين لمخنثه',
+
+'يبن لفاجرة', 
+
+'تسوية الامور مع امج', 
+
+'تجريد كسختمك من الملابس', 
+
+'ياوولد زواني', 
+
+'افخخ كسختك', 
+
+'تحجر طبزختك', 
+
+];
+
+const Bottleneck = require('bottleneck');
+
+const limiter = new Bottleneck({
+
+  minTime: delayBetweenReplies,
+
+  maxConcurrent: 5,
+
+  strategy: Bottleneck.strategy.OVERFLOW,
+
+});
+
+class AutoReplier {
+
+  constructor(botInstances, targetChannels, targetUsers, randomReplies) {
+
+    this.botInstances = botInstances;
+
+    this.targetChannels = targetChannels;
+
+    this.targetUsers = targetUsers;
+
+    this.randomReplies = randomReplies;
+
+    this.limiter = limiter;
+
+    this.repliedMessageIds = new Set();
+
+  }
+  // اظهار كتابة عند الرد
+  async simulateTyping(channelId) {
+
+    try {
+
+      const headers = {
+
+        'Authorization': mytoken[0],
+
+        'Content-Type': 'application/json',
+
+      };
+
+      const axios = require('axios');
+
+      await axios.post(`https://discord.com/api/v10/channels/${channelId}/typing`, {}, { headers, timeout: 15000 });
+
+      console.log(`Typing simulated in channel ${channelId}`);
+
+    } catch (error) {
+
+      console.error(`Error simulating typing: ${error.message}`);
+
+    }
+
+  }
+
+  async replyToMessage(bot, message) {
+
+    try {
+      // انتضار قبل الرد
+      await new Promise(resolve => setTimeout(resolve, 200));
+      // اختيار رد عشوائي
+      const randomReply = this.randomReplies[Math.floor(Math.random() * this.randomReplies.length)];
+      // اعادة محاولات في حدوث الخطأ
+      await this.limiter.schedule(async () => {
+
+        let attempts = 0;
+
+        const maxAttempts = 5;
+
+        const baseDelay = 5000;
+
+        while (attempts < maxAttempts) {
+
+          try {
+            // ارسال رد
+            await bot.createMessage(message.channel.id, {
+
+              content: randomReply,
+
+              message_reference: { message_id: message.id },
+
+              allowedMentions: { repliedUser: true },
+
+            });
+
+            console.log(`Replied to message ID ${message.id} with: ${randomReply}`);
+
+            this.repliedMessageIds.add(message.id);
+
+            await new Promise(resolve => setTimeout(resolve, 1000));
+
+            break;
+
+          } catch (error) {
+
+            attempts++;
+
+            const delay = baseDelay * attempts;
+
+            if (error.status === 429) {
+
+              const retryAfter = error.response.headers['retry-after'] || 10;
+
+              console.log(`Rate limit reached. Retrying after ${retryAfter} seconds...`);
+
+              await new Promise(resolve => setTimeout(resolve, (parseInt(retryAfter) + 1) * 1000));
+
+            } else if (['ECONNABORTED', 'ENOTFOUND', 'ETIMEDOUT'].includes(error.code)) {
+
+              console.log(`Network error, attempt ${attempts}/${maxAttempts}. Retrying in ${delay / 1000} seconds...`);
+
+              await new Promise(resolve => setTimeout(resolve, delay));
+              // توقف لفترة 5 ثواني في حال حدوث خطأ
+            } else {
+
+              console.error(`Failed to reply to message ID ${message.id} due to unexpected error: ${error.message}`);
+
+              break;
+
+            }
+
+            if (attempts === maxAttempts) {
+
+              console.error(`Max retry attempts reached for message ID ${message.id}. Skipping this message.`);
+
+            }
+
+          }
+
+        }
+
+      });
+
+    } catch (error) {
+
+      console.error(`Unexpected error in replyToMessage: ${error.message}`);
+
+    }
+
+  }
+
+  async fetchLastMessages(bot, channelId) {
+
+    try {
+
+      const messages = await bot.getMessages(channelId, { limit: 30 });
+      // تحكم في عدد ردود في رسايل قديمة
+      return messages;
+
+    } catch (error) {
+
+      console.error(`Error fetching messages from channel ${channelId}: ${error.message}`);
+
+      return [];
+
+    }
+
+  }
+  // تسجيل احداث
+  async handleMessages(bot) {
+
+    bot.on('ready', async () => {
+
+      console.log(`Logged in as ${bot.user.username}#${bot.user.discriminator}`);
+
+      for (let channelId of this.targetChannels) {
+
+        const messages = await this.fetchLastMessages(bot, channelId);
+
+        const replyPromises = [];
+
+        for (let message of messages) {
+
+          if (!this.repliedMessageIds.has(message.id) && this.targetUsers.includes(message.author.id)) {
+
+            await this.simulateTyping(message.channel.id);
+
+            const replyPromise = this.replyToMessage(bot, message);
+
+            replyPromises.push(replyPromise);
+
+          }
+
+        }
+
+        await Promise.all(replyPromises);
+
+      }
+
+    });
+    // استماع لرسايل الجديده 
+    bot.on('messageCreate', async (message) => {
+
+      const isTargetChannel = this.targetChannels.includes(message.channel.id);
+
+      const isTargetUser = this.targetUsers.includes(message.author.id);
+
+      if (isTargetChannel && isTargetUser && !this.repliedMessageIds.has(message.id)) {
+
+        await this.simulateTyping(message.channel.id);
+
+        await this.replyToMessage(bot, message);
+
+      }
+
+    });
+
+  }
+
+}
+
+const Eris = require('eris');
+
+const botInstances = mytoken.map(token => {
+
+  const bot = new Eris(token);
+
+  bot.connect();
+
+  return bot;
+
+});
+
+botInstances.forEach(bot => {
+
+  const autoReplier = new AutoReplier(botInstances, targetChannels, targetUsers, randomReplies);
+
+  autoReplier.handleMessages(bot);
+
+});// صفحات الويب 24/7
+
+const express = require('express');
+
+const http = require('http');
+
+const app = express();
+
+app.get("/", (req, res) => {
+
+  res.send(`
+
+  <body>
+
+    <center><h1>كسختو لحن</h1></center>
+
+  </body>`);
+
+});
+
+setInterval(() => {
+
+  const now = new Date();
+
+  console.log(now.toLocaleTimeString());
+
+}, 1000);
+
+const server = http.createServer((req, res) => {
+
+  res.setHeader('Content-Type', 'text/html');
+
+  res.end(`
+
+    <html>
+
+      <head>
+
+        <title>كسختو دارك</title>
+
+      </head>
+
+      <body style="margin: 0; padding: 0;">
+
+        <iframe width="100%" height="100%" src="https://axocoder.vercel.app/" frameborder="0" allowfullscreen></iframe>
+
+      </body>
+
+    </html>`);
+
+});
+
+server.listen(8080, () => {
+
+  console.log('I!!m ready nik ksm l7n..24H!!');
+
+  app.listen(3000, () => console.log("I'm Ready To nik ksm dark..! 24H"));
+
+});
+
