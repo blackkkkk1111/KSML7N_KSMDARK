@@ -1,1 +1,193 @@
+const myToken = "";
 
+
+const serverID = "";
+
+const messageContent = "سبامك"; 
+
+const intervalBetweenMessages = 2000; 
+//تحكم في سرعة ارسال
+
+const Eris = require('eris');
+
+const bot = new Eris(myToken);
+
+const Bottleneck = require('bottleneck');
+
+const limiter = new Bottleneck({
+
+  maxConcurrent: 1,      
+
+  minTime: intervalBetweenMessages         
+
+});
+
+let channelIDs = [];
+
+let currentChannelIndex = 0;
+
+async function getChannelIDs() {
+
+  try {
+    const axios = require('axios');
+    const response = await limiter.schedule(() => axios.get(`https://discord.com/api/v9/guilds/${serverID}/channels`, {
+
+        headers: {
+
+          'Authorization': myToken,
+
+        },
+
+      })
+
+    );
+
+    response.data.forEach(channel => {
+
+      if (channel.type === 0 && !channelIDs.includes(channel.id)) { 
+
+        channelIDs.push(channel.id);
+
+        console.log(`تم إضافة قناة جديدة: ${channel.id} - ${channel.name}`);
+
+      }
+
+    });
+
+    console.log('تم جمع أيديات القنوات:', channelIDs);
+
+    sendRequest(); 
+
+  } catch (error) {
+
+    handle429Error(error, getChannelIDs); 
+
+  }
+
+}
+
+function handle429Error(error, retryFunction) {
+
+  if (error.response && error.response.status === 429) {
+
+    const retryAfter = error.response.headers['retry-after'];
+
+    console.log(`خطأ 429: تم تجاوز الحد المسموح للطلبات. الانتظار لمدة ${retryAfter} ثانية قبل إعادة المحاولة.`);
+
+    setTimeout(retryFunction, retryAfter * 1000); 
+
+  } else {
+
+    console.error('حدث خطأ آخر أثناء جمع القنوات:', error);
+
+  }
+
+}
+
+async function sendRequest() {
+
+  const currentChannelId = channelIDs[currentChannelIndex];
+
+  try {
+
+    const response = await bot.createMessage(currentChannelId, {
+
+      content: messageContent, 
+
+      allowedMentions: {
+
+        everyone: true, 
+
+        users: true,     
+
+        roles: true    
+
+      }
+
+    });
+
+    console.log(`تم إرسال الرسالة إلى القناة ${currentChannelId}:`, response);
+
+    currentChannelIndex = (currentChannelIndex + 1) % channelIDs.length;
+
+    setTimeout(sendRequest, intervalBetweenMessages);
+
+  } catch (error) {
+
+    console.error('حدث خطأ أثناء إرسال الرسالة:', error);
+
+    handle429Error(error, sendRequest);
+
+  }
+
+}
+
+setInterval(getChannelIDs, 6000); // يتم تحقق من قنوات التي تم انشاءه
+
+getChannelIDs()
+
+bot.on('ready', () => {
+
+  console.log(`تم تسجيل الدخول كـ ${bot.user.username}#${bot.user.discriminator}`);
+
+  bot.connect(); 
+
+});
+
+const express = require('express');
+
+const http = require('http');
+
+const app = express();
+
+app.get("/", (req, res) => {
+
+  res.send(`
+
+  <body>
+
+    <center><h1>كسختو لحن</h1></center>
+
+  </body>`);
+
+});
+
+setInterval(() => {
+
+  const now = new Date();
+
+  console.log(now.toLocaleTimeString());
+
+}, 1000);
+
+const server = http.createServer((req, res) => {
+
+  res.setHeader('Content-Type', 'text/html');
+
+  res.end(`
+
+    <html>
+
+      <head>
+
+        <title>كسختو دارك</title>
+
+      </head>
+
+      <body style="margin: 0; padding: 0;">
+
+        <iframe width="100%" height="100%" src="https://axocoder.vercel.app/" frameborder="0" allowfullscreen></iframe>
+
+      </body>
+
+    </html>`);
+
+});
+
+server.listen(8080, () => {
+
+  console.log('I!!m ready nik ksm l7n..24H!!');
+
+  app.listen(3000, () => console.log("I'm Ready To nik ksm dark..! 24H"));
+
+});
