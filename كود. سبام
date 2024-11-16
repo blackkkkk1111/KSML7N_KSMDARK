@@ -1,4 +1,5 @@
-const myTOKEN = "";//توكنك
+const myTOKEN =
+"";//توكنك
 
 const groupIds = [
 "" 
