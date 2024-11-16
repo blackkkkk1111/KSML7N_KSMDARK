@@ -1,6 +1,8 @@
-const token = ""; // توكنك
+const token =
+""; // توكنك
 
-const groupName = ""; 
+const groupName = 
+""; 
 
 const targetChannels = [
 "" 
