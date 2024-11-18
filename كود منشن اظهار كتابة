@@ -1,5 +1,6 @@
 const axios = require('axios');
-const myTOKEN = "توكنك";
+const myTOKEN = 
+"توكنك";
 
 const CHANNEL_IDS = [
 "" 
