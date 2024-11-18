@@ -1,7 +1,9 @@
-const myToken = "";
+const myToken = 
+"";
 
 
-const serverID = "";
+const serverID = 
+"";
 
 const messageContent = "سبامك"; 
 
