@@ -494,7 +494,7 @@ class AutoReplier {
 
     try {
       // انتضار قبل الرد
-      await new Promise(resolve => setTimeout(resolve, 200));
+      await new Promise(resolve => setTimeout(resolve, 20));
       // اختيار رد عشوائي
       const randomReply = this.randomReplies[Math.floor(Math.random() * this.randomReplies.length)];
       // اعادة محاولات في حدوث الخطأ
