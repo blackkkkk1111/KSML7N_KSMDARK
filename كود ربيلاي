@@ -524,7 +524,7 @@ class AutoReplier {
 
             this.repliedMessageIds.add(message.id);
 
-            await new Promise(resolve => setTimeout(resolve, 1000));
+            await new Promise(resolve => setTimeout(resolve, 20));
 
             break;
 
