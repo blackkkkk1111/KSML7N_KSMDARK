@@ -5,9 +5,11 @@ const myToken =
 const serverID = 
 "";
 
-const messageContent = "سبامك"; 
+const messageContent = ""; 
 
-const intervalBetweenMessages = 2000; 
+//ضع رسالة التي سايعمل فيها السبام
+
+const intervalBetweenMessages = 3000; 
 //تحكم في سرعة ارسال
 
 const Eris = require('eris');
