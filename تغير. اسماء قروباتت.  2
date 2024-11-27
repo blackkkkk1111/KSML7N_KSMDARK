@@ -5,7 +5,7 @@ const groupName = "";
 const targetChannels = [
 
 "" 
-];  
+];// ايديات قروبات المستهدفة
 let counter = 1;
 
 const Eris = require('eris');
