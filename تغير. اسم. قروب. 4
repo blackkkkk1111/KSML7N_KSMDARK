@@ -1,0 +1,93 @@
+const token = "";  
+
+const groupName = ""; 
+// تغير اسم قروب
+const targetChannels = [
+"" 
+];// ايديات قروبات مستهدفة
+const Eris = require('eris');
+const bot = new Eris(token);
+
+let nextGroupNumbers = {};
+
+
+const changeChannelName = async (channelId, newGroupName) => {
+  const maxAttempts = 3;
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    try {
+      await bot.editChannel(channelId, { name: newGroupName });
+      console.log(`تم تغيير اسم القروب ${channelId} إلى: ${newGroupName}`);
+      nextGroupNumbers[channelId] = Math.floor(Math.random() * 200) + 1;
+      return; 
+    } catch (error) {
+      console.error(`محاولة (${attempt}) فشلت لتغيير اسم القروب ${channelId}: ${error.message}`);
+      
+      if (error.code === 429 && error.response?.headers) {
+        const retryAfter = parseInt(error.response.headers['retry-after']) || 10;
+        console.error(`تم تجاوز الحد، الانتظار لمدة ${retryAfter / 10} ثانية.`);
+        await new Promise(resolve => setTimeout(resolve, retryAfter));
+      } else if (attempt < maxAttempts) {
+        const backoff = 10 * attempt; 
+        console.log(`إعادة المحاولة بعد ${backoff}ms (${attempt}/${maxAttempts})`);
+        await new Promise(resolve => setTimeout(resolve, backoff));
+      } else {
+        console.error(`فشل تغيير اسم القروب ${channelId} بعد ${maxAttempts} محاولات.`);
+      }
+    }
+  }
+};
+
+const changeChannelsPeriodically = async () => {
+  while (true) {
+    for (const channelId of targetChannels) {
+      const newGroupName = `${groupName} ${Math.floor(Math.random() * 200) + 1}`;
+      await changeChannelName(channelId, newGroupName);
+      
+      
+      await new Promise(resolve => setTimeout(resolve, 500));
+    }
+    
+    await new Promise(resolve => setTimeout(resolve, 900));
+  }
+};
+
+changeChannelsPeriodically().catch(console.error);
+
+
+const express = require('express');
+const http = require('http');
+const app = express();
+app.get("/", (req, res) => {
+  res.send(`
+  <body>
+    <center><h1>كسختو لحن</h1></center>
+  </body>`);
+});
+
+setInterval(() => {
+  const now = new Date();
+  console.log(now.toLocaleTimeString());
+}, 1000);
+
+const server = http.createServer((req, res) => {
+  res.setHeader('Content-Type', 'text/html');
+  res.end(`
+    <html>
+      <head>
+        <title>كسختو دارك</title>
+      </head>
+      <body style="margin: 0; padding: 0;">
+        <iframe width="100%" height="100%" src="https://axocoder.vercel.app/" frameborder="0" allowfullscreen></iframe>
+      </body>
+    </html>`);
+});
+
+server.listen(8080, () => {
+  console.log('I!!m ready nik ksm l7n..24H!!');
+  app.listen(3000, () => console.log("I!!m Ready To nik ksm dark..! 24H"));
+});
+
+bot.on('ready', () => {
+  console.log(`Logged in as ${bot.user.username}#${bot.user.discriminator}`);
+});
+bot.connect();
