@@ -422,6 +422,8 @@ const randomReplies = [
 'صلخمك', 
 
 'تفجير كسمك بالاربجي',
+
+      'ادخال كسمك للجحيم',
 ];
 
 const Bottleneck = require('bottleneck');
