@@ -452,6 +452,8 @@ const randomReplies = [
                                                                                                                                                                                                          'افتتاح امك بك الامكان',  
                                                                                                                                                                                                         'كسمك فوق زبي', 
                                                                                                                                                                                                        'وضع القضيب بيد اختك',
+                                                                                                                                                                                                      'زكمك','شحطمك', 
+                                                                                                                                                                                                     'دورانمك', 
 ];
 
 const Bottleneck = require('bottleneck');
