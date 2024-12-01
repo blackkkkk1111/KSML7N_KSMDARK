@@ -18,7 +18,7 @@ const targetChannels = [
 
 const delayBetweenReplies = 200; // التحكم في سرعة إرسال الردود
 
-const randomReplies = [
+const randomReplies = [ 'كس اهلمك', 
 
        'رجلي بكسمك', 
 
