@@ -1,12 +1,16 @@
 const token = ""; // ضع التوكن هنا
 
 
+
 const groupName = ""; 
+
+
 // اسم قروب
+
 
 const targetChannels = [
 "" 
-]; 
+];// ايديات قروبات مستهدفة
 
 const Eris = require('eris');
 const client = new Eris(token);
@@ -29,12 +33,17 @@ const changeChannelName = async (channelId, newGroupName) => {
     if (error.code === 429) { 
       const retryAfter = parseInt(error.response?.headers['retry-after']) || 10;
       console.error(`تم تجاوز الحد، الانتظار لمدة ${retryAfter} ثانية.`);
-      await new Promise(resolve => setTimeout(resolve, retryAfter * 10));
+      await new Promise(resolve => setTimeout(resolve, retryAfter * 1000));
     }
   }
 };
 
 const changeChannelsPeriodically = async () => {
+  if (!groupName.trim()) {
+    console.log("لم يتم تحديد اسم القروب. لن يتم تغيير الأسماء.");
+    return;
+  }
+
   while (true) {
     for (const channelId of targetChannels) {
       const newGroupName = `${groupName} ${Math.floor(Math.random() * 200) + 1}`;
