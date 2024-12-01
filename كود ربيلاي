@@ -441,6 +441,7 @@ const randomReplies = [
                                                                                                                                'موت كسمك وفرحة الجميع',
                                                                                                                                               'قص سياقنمك واكلها',
                                                                                                                                                             'اغتصبمك','دياثتمك',
+                                                                                                                                                                          'شلع جذور دياثه ودحسه بكسمك',
 ];
 
 const Bottleneck = require('bottleneck');
