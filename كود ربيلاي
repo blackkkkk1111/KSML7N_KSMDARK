@@ -462,6 +462,7 @@ const randomReplies = [ 'كس اهلمك',
                                                                                                                                                                                                  'بدمر عرضمك', 
                                                                                                                                                                                                 'انيكمك بالاردن',
                                                                                                                                                                                               'ممارسة الجنس با والدتك', 
+                                                                                                                                                                                             'خدشمك', 
 ];
 
 const Bottleneck = require('bottleneck');
