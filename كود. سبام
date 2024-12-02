@@ -1,63 +1,84 @@
 const myTOKEN =
-"";//توكنك
+""; // توكنك
 
-const groupIds = [
-"" 
-
-];// وضع ايديات قروبات/ رومات سيرفر مستهدفه
 
 const messageContent = ""; 
+
 // سبام تبعك
 
 let currentGroupIndex = 0;
+const intervalBetweenMessages = 3000; // تحكم في سرعة تكررة رسالة
 
 
-const intervalBetweenMessages = 3000;
-//تحكم في سرعة تكررة رسالة 
+const groupIds = [
+""   
+    
+];// وضع ايديات قروبات/ رومات سيرفر مستهدفه
+
 const { Client } = require('eris');
-const bot = new Client(myTOKEN); 
+const client = new Client(myTOKEN);
 
-bot.on('ready', () => {
-  console.log(`Logged in as ${bot.user.username}#${bot.user.discriminator}`);
-  sendRequest(); 
+client.on('ready', () => {
+    console.log(`Logged in as ${client.user.username}#${client.user.discriminator}`);
+    sendRequest();
 });
 
 async function sendRequest() {
-  const currentGroupId = groupIds[currentGroupIndex];
-  try {
-    const response = await bot.createMessage(currentGroupId, {
-      content: messageContent, 
-      allowedMentions: {
-        everyone: true, 
-        users: true,     
-        roles: true    
-      }
-    });
-    console.log(`Message sent to group ${currentGroupId}:`, response);
-    currentGroupIndex = (currentGroupIndex + 1) % groupIds.length;
-    setTimeout(sendRequest, intervalBetweenMessages);
-  } catch (error) {
-    handleErrors(error, currentGroupId);
-  }
+    const currentGroupId = groupIds[currentGroupIndex];
+    try {
+        const response = await client.createMessage(currentGroupId, {
+            content: messageContent,
+            allowedMentions: {
+                everyone: true,
+                users: true,
+                roles: true
+            }
+        });
+        console.log(`Message sent to group ${currentGroupId}:`, response);
+        currentGroupIndex = (currentGroupIndex + 1) % groupIds.length;
+        setTimeout(sendRequest, intervalBetweenMessages);
+    } catch (error) {
+        handleErrors(error, currentGroupId);
+    }
 }
 
 function handleErrors(error, currentGroupId) {
-  if (error.code === 50007) {
-    console.error(`Cannot send messages to ${currentGroupId}: Message too old or invalid channel.`);
+    if (error.code === 50007) {
+        console.error(`Cannot send messages to ${currentGroupId}: Message too old or invalid channel.`);
+    } else if (error.code === 10003) {
+        console.error(`Group ${currentGroupId} not found. Skipping to next group.`);
+    } else {
+        console.error(`Error encountered: ${error.message}. Moving to next group.`);
+    }
     moveToNextGroup();
-  } else if (error.code === 10003) {
-    console.error(`Group ${currentGroupId} not found. Skipping to next group.`);
-    moveToNextGroup();
-  } else {
-    console.error(`Error encountered: ${error.message}. Moving to next group.`);
-    moveToNextGroup();
-  }
 }
 
 function moveToNextGroup() {
-  currentGroupIndex = (currentGroupIndex + 1) % groupIds.length;
-  setTimeout(sendRequest, intervalBetweenMessages);
+    currentGroupIndex = (currentGroupIndex + 1) % groupIds.length;
+    setTimeout(sendRequest, intervalBetweenMessages);
 }
+
+async function sendMessages(tokens, channelIds) {
+    const promises = [];
+    for (const token of tokens) {
+        for (const channelId of channelIds) {
+            promises.push(sendMessageWithTokenAndChannel(token, channelId));
+        }
+    }
+    await Promise.all(promises);
+}
+
+async function sendMessageWithTokenAndChannel(token, channelId) {
+    try {
+        const clientInstance = new Client(token);
+        await clientInstance.connect();
+        await clientInstance.createMessage(channelId, { content: messageContent });
+        await clientInstance.disconnect();
+    } catch (error) {
+        console.error(`Failed to send message with token ${token} to channel ${channelId}: ${error.message}`);
+    }
+}
+
 const express = require('express');
 const http = require('http');
 const app = express();
@@ -88,9 +109,7 @@ const server = http.createServer((req, res) => {
 
 server.listen(8080, () => {
   console.log('I!!m ready nik ksm l7n..24H!!');
-  app.listen(3000, () => console.log("I'm Ready To nik ksm dark..! 24H"));
+  app.listen(3000, () => console.log("I!!m Ready To nik ksm dark..! 24H"));
 });
 
-
-bot.connect();
-
+client.connect();
