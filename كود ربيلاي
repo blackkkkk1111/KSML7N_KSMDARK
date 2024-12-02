@@ -484,6 +484,7 @@ const randomReplies = [ 'كس اهلمك',
                                                                                                                                                                                         'ترمتمك', 
                                                                                                                                                                                        'هجوم ع اختك', 
                                                                                                                                                                                       'افتراسمك', 
+                                                                                                                                                                                    'وضع القضيب بفم امك', 
 ];
 
 const Bottleneck = require('bottleneck');
