@@ -19,7 +19,10 @@ const client = new Eris(token);
 const Bottleneck = require('bottleneck');
 const limiter = new Bottleneck({
   minTime: 30, 
-  maxConcurrent: 2 
+
+  maxConcurrent: 2,
+  
+  strategy: Bottleneck.strategy.OVERFLOW,
 });
 
 let nextGroupNumbers = {};
