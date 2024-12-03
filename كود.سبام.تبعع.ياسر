@@ -5,7 +5,7 @@ const myToken =
 
 const payload = {
   content:
-    "سبامك",
+    "",
 };
 
 const header = {
@@ -34,8 +34,7 @@ async function sendRequest() {
     console.error(error.message);
 
     if (error.response) {
-      console.error(
-        `Received ${error.response.status} error. Trying again later.`
+      console.error(`Received ${error.response.status} error. Trying again later.`
       );
     }
   }
