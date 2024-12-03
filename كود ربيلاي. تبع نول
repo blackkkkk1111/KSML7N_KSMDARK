@@ -6,9 +6,8 @@ const targetUsers = [
   "" 
 ]; // ضع معرفات المستخدمين المستهدفين هنا
 
-const targetChannels = [
-  "" 
-]; // ضع معرفات القنوات المستهدفة هنا
+const targetChannels = 
+  ""; // ضع معرفات القنوات المستهدفة هنا
 
 const delayBetweenReplies = 200; // التحكم في سرعة إرسال الردود
 
