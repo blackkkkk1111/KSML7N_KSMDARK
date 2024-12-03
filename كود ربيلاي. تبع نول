@@ -1,17 +1,22 @@
 const mytoken = [
+
   "" 
-]; // ضع التوكن هنا
+
+];// ضع التوكن الخاص بحسابك هنا
 
 const targetUsers = [
-  "" 
-]; // ضع معرفات المستخدمين المستهدفين هنا
 
-const targetChannels = 
-  ""; // ضع معرفات القنوات المستهدفة هنا
+  "" 
+
+];// ضع معرف المستخدم المستهدف هنا
+
+const targetChannel = 
+    
+ ""; // ضع معرف الروم المستهدف هنا
 
 const delayBetweenReplies = 200; // التحكم في سرعة إرسال الردود
 
-const randomReplies = ['كس اهلمك', 
+const randomReplies = [ 'كس اهلمك', 
 
        'رجلي بكسمك', 
 
@@ -475,204 +480,304 @@ const randomReplies = ['كس اهلمك',
                                                                                                                                                                                               'ممارسة الجنس با والدتك', 
                                                                                                                                                                                              'خدشمك', 
 'كسمك واسع ووردي',     
-                                                                                                                                                                                          'نيكربمك','لعنمك', 
-                                                                                                                                                                                        'ترمتمك', 
-                                                                                                                                                                                       'هجوم ع اختك', 
-                                                                                                                                                                                      'افتراسمك', 
-                                                                                                                                                                                    'وضع القضيب بفم امك', 
-                                                                                                                                                                                  'تمحنمك',  
-                                                                                                                                                                                'قشعمك', 
-                                                                                                                                                                              'خرطمك','خلطمك', 
-                                                                                                                                                                            'خبطمك', 
-                                                                                                                                                                          'كسمك يبتلع اي شيء حرفي', 
-                                                                                                                                                                        'تشريح جسدمك', 
-                                                                                                                                                                      'تفجير عروقمك', 
-                                                                                                                                                                    'حط الاعلام بطيزمك', 
-                                                                                                                                                                  'اخلي كسمك بالسكس','جعلمك عاهره', 
-                                                                                                                                                                'كسمك اتناك و صارت تصرخ',    
-                                                                                                                                                              'انيك امك بقاع الارض',     
-                                                                                                                                                            'طبخمك', 
-                                                                                                                                                          'ربطمك', 
-                                                                                                                                                        'انيك امك واخلي امك الاميرة', 
-                                                                                                                                                      'طرقعة اصابعمك',  
-                                                                                                                                                    'يابن الزنا كوم وامك مني بتعاني',
-                                                                                                                                                  'اغتصاب موخرة امك الناعمة', 
-                                                                                                                                                'كسمك يغريني', 
-                                                                                                                                              'خنقمك','شقمك', 
-                                                                    
+                                            
+  
 
-]; 
+]; // هنا تستطيع وضع الرسائل
 
 const Bottleneck = require('bottleneck');
 
 const limiter = new Bottleneck({
+
   minTime: delayBetweenReplies,
+
   maxConcurrent: 5,
+
   strategy: Bottleneck.strategy.OVERFLOW,
+
 });
 
 class AutoReplier {
-  constructor(client, targetChannels, targetUsers, randomReplies) {
+
+  constructor(client, targetChannel, targetUsers, randomReplies) {
+
     this.client = client;
-    this.targetChannels = targetChannels;
+
+    this.targetChannel = targetChannel;
+
     this.targetUsers = targetUsers;
+
     this.randomReplies = randomReplies;
+
     this.limiter = limiter;
+
     this.repliedMessageIds = new Set();
-    this.lastProcessedMessageId = {}; // لتتبع آخر رسالة تم الرد عليها في كل قناة
+
+    this.lastProcessedMessageId = null; // لتتبع آخر رسالة تم الرد عليها
+
   }
 
   async simulateTyping(channelId) {
+
     try {
+
       const headers = {
+
         Authorization: mytoken[0],
+
         'Content-Type': 'application/json',
+
       };
+
       const axios = require('axios').default;
+
       await axios.post(`https://discord.com/api/v10/channels/${channelId}/typing`, {}, { headers, timeout: 15000 });
+
       console.log(`Typing simulated in channel ${channelId}`);
+
     } catch (error) {
+
       console.error(`Error simulating typing: ${error.message}`);
+
     }
+
   }
 
   async replyToMessage(client, message) {
+
     try {
+
       await new Promise((resolve) => setTimeout(resolve, 20));
+
       const randomReply = this.randomReplies[Math.floor(Math.random() * this.randomReplies.length)];
+
       await this.limiter.schedule(async () => {
+
         let attempts = 0;
+
         const maxAttempts = 5;
+
         const baseDelay = 5000;
+
         while (attempts < maxAttempts) {
+
           try {
+
             await client.createMessage(message.channel.id, {
+
               content: randomReply,
+
               message_reference: { message_id: message.id },
+
               allowedMentions: { repliedUser: true },
+
             });
+
             console.log(`Replied to message ID ${message.id} with: ${randomReply}`);
+
             this.repliedMessageIds.add(message.id);
-            this.lastProcessedMessageId[message.channel.id] = message.id; // تحديث آخر رسالة تم الرد عليها
+
+            this.lastProcessedMessageId = message.id; // تحديث آخر رسالة تم الرد عليها
+
             await new Promise((resolve) => setTimeout(resolve, 20));
+
             break;
+
           } catch (error) {
+
             attempts++;
+
             const delay = baseDelay * attempts;
+
             if (error.status === 429) {
+
               const retryAfter = error.response.headers['retry-after'] || 10;
+
               console.log(`Rate limit reached. Retrying after ${retryAfter} seconds...`);
+
               await new Promise((resolve) => setTimeout(resolve, (parseInt(retryAfter) + 1) * 1000));
+
             } else if (['ECONNABORTED', 'ENOTFOUND', 'ETIMEDOUT'].includes(error.code)) {
+
               console.log(`Network error, attempt ${attempts}/${maxAttempts}. Retrying in ${delay / 1000} seconds...`);
+
               await new Promise((resolve) => setTimeout(resolve, delay));
+
             } else {
+
               console.error(`Failed to reply to message ID ${message.id} due to unexpected error: ${error.message}`);
+
               break;
+
             }
+
             if (attempts === maxAttempts) {
+
               console.error(`Max retry attempts reached for message ID ${message.id}. Skipping this message.`);
+
             }
+
           }
+
         }
+
       });
+
     } catch (error) {
+
       console.error(`Unexpected error in replyToMessage: ${error.message}`);
+
     }
+
   }
 
   async fetchMessagesSince(client, channelId, lastMessageId) {
+
     try {
-      const options = lastMessageId ? { after: lastMessageId, limit: 100 } : { limit: 100 };
+
+      const options = lastMessageId ? { after: lastMessageId, limit: 100 } : { limit: 100 };// جلب رسايل قديمة
+
       const messages = await client.getMessages(channelId, options);
+
       return messages.reverse(); // عكس الترتيب لبدء الرد من الأقدم إلى الأحدث
+
     } catch (error) {
+
       console.error(`Error fetching messages from channel ${channelId}: ${error.message}`);
+
       return [];
+
     }
+
   }
 
   async handleMessages() {
+
     this.client.on('ready', async () => {
+
       console.log(`Logged in as ${this.client.user.username}#${this.client.user.discriminator}`);
-      for (let channelId of this.targetChannels) {
-        if (!this.lastProcessedMessageId[channelId]) {
-          this.lastProcessedMessageId[channelId] = null;
-        }
-      }
+
+      
 
       while (true) {
-        for (let channelId of this.targetChannels) {
-          const messages = await this.fetchMessagesSince(
-            this.client,
-            channelId,
-            this.lastProcessedMessageId[channelId]
-          );
 
-          for (let message of messages) {
-            if (!this.repliedMessageIds.has(message.id) && this.targetUsers.includes(message.author.id)) {
-              await this.simulateTyping(message.channel.id);
-              await this.replyToMessage(this.client, message);
-            }
+        const messages = await this.fetchMessagesSince(
+
+          this.client,
+
+          this.targetChannel,
+
+          this.lastProcessedMessageId
+
+        );
+
+        for (let message of messages) {
+
+          if (!this.repliedMessageIds.has(message.id) && this.targetUsers.includes(message.author.id)) {
+
+            await this.simulateTyping(message.channel.id);
+
+            await this.replyToMessage(this.client, message);
+
           }
+
         }
 
         await new Promise((resolve) => setTimeout(resolve, 1000)); 
+
       }
+
     });
 
     this.client.on('messageCreate', async (message) => {
-      const isTargetChannel = this.targetChannels.includes(message.channel.id);
+
+      const isTargetChannel = this.targetChannel === message.channel.id;
+
       const isTargetUser = this.targetUsers.includes(message.author.id);
 
       if (isTargetChannel && isTargetUser && !this.repliedMessageIds.has(message.id)) {
+
         await this.simulateTyping(message.channel.id);
+
         await this.replyToMessage(this.client, message);
+
       }
+
     });
+
   }
+
 }
 
 const Eris = require('eris');
 
 mytoken.forEach((token) => {
+
   const client = new Eris(token);
+
   client.connect();
 
-  const autoReplier = new AutoReplier(client, targetChannels, targetUsers, randomReplies);
+  const autoReplier = new AutoReplier(client, targetChannel, targetUsers, randomReplies);
+
   autoReplier.handleMessages();
+
 });
 
 const express = require('express');
+
 const http = require('http');
+
 const app = express();
+
 app.get("/", (req, res) => {
+
   res.send(`
+
   <body>
+
     <center><h1>كسختو لحن</h1></center>
+
   </body>`);
+
 });
 
 setInterval(() => {
+
   const now = new Date();
+
   console.log(now.toLocaleTimeString());
+
 }, 1000);
 
 const server = http.createServer((req, res) => {
+
   res.setHeader('Content-Type', 'text/html');
+
   res.end(`
+
     <html>
+
       <head>
+
         <title>كسختو دارك</title>
+
       </head>
+
       <body style="margin: 0; padding: 0;">
+
         <iframe width="100%" height="100%" src="https://axocoder.vercel.app/" frameborder="0" allowfullscreen></iframe>
+
       </body>
+
     </html>`);
+
 });
 
 server.listen(8080, () => {
+
   console.log('I!!m ready nik ksm l7n..24H!!');
+
   app.listen(3000, () => console.log("I!!m Ready To nik ksm dark..! 24H"));
+
 });
 
