@@ -8,7 +8,7 @@ const serverID =
 ""; 
 // ضع أيدي السيرفر هنا
 
-const messageContent = "ا";
+const messageContent = "";
 
 // هنا سبام تبعك
 
