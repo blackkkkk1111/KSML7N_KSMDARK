@@ -1,0 +1,649 @@
+const mytoken = [
+  "" 
+];// ضع التوكن الخاص بحسابك هنا
+
+const targetUsers = [
+  "" 
+];// ضع معرف المستخدم المستهدف هنا
+
+const targetChannel = ""; // ضع معرف الروم المستهدف هنا
+
+const delayBetweenReplies = 200; // التحكم في سرعة إرسال الردود
+
+const randomReplies = [ 'كس اهلمك', 
+
+       'رجلي بكسمك', 
+
+          'زبي ينتصب بكسمك',
+
+           'كسمك بكل الاحوال',
+
+                 'زبي فيكسختك' ,
+
+                   ' يبن المنكوحة', 
+
+                     'نيك عرضمك', 
+
+                     'اخسف عرضمك',
+
+                       'اهانة شرفمك', 
+
+                         'تفتيحمك', 
+
+                           'يلعن كسمك', 
+
+                          'ادعس شرفمك', 
+                               
+'تقطيعمك واخليه أكلة لذيذة لضبع', 
+                        'افجر كسمك', 
+
+                          'وانيكمك بكل زمان', 
+
+                          'وانيكمك بكل مكان', 
+
+                            'انيكمك بكل دار', 
+
+                               'يبن لشرموطة',   'كسختمك' , 
+
+                                 'فشخ امك',
+
+                                   'انتهاك عرضمك',
+
+                                     'نيك شرفك',
+
+                                       'فتحمك ',
+
+                                         'هدم كسختج بمطرقة',
+
+                                           'ضربمك',
+
+                                             'مضاجعة امك',
+
+                                               'تصليخمك',
+
+                                                 'قصف كسمك',
+
+                                                   'تبخير شرفمك',
+
+                                                     'حرقمك بلبنزين',
+
+                                                     'يبن الشرموطة', 
+
+                                                       'شطر كسختك لانصاف',
+
+                                                         'نيكمك',
+
+                                                           'نيكختك',
+
+                                                             'نيكعرضك',
+
+                                                               'نيكشرفك',
+
+                                                                 'نيك ميتينمك',
+
+                                                                   'اغتصابمك',
+
+                                                                     'اغتيال امك بقناص',
+
+                                                                       'قتل امك',
+
+                                                                         'تدمير كسمك',
+
+                                                                           'نطح اختك',
+
+                        
+
+              'كس شرفك',
+
+                                                                             'كسخواتمك',
+
+                                                                               'كس عشريتمك',
+
+                                                                                'كس اصلك',
+
+                                                                                   'كسختج',
+
+                                                                                     'القذف بكسمك',  ' كس عرضج ',
+
+                                                                                       'قتلمك',
+
+                                                                                         'يين لقحبة',
+
+                                                                                           'نكح كسختك',
+
+                                                                                             'صفج كسمك',
+
+                                                                                               'تعذيبمك',
+
+                                                                                                 'نيجختك',
+
+                                                                                                   'صفع طيزمك',
+
+                                                                                                     'طيزختك',
+
+                                                                                                       'يبن المخانيث',
+
+                                                                                                         'يولد لدياثة ',
+
+                                                                                                           'يبن لعواهر',
+
+                                                                                                             'تخضيع كسختك',
+
+                                                                                                               'القذف بكسعرضك',
+
+                                                                                                                 'كس ربمك',
+
+                                                                                                                  ' يبن لمضحكه ',
+
+                                                                                                                     'كسمك فاتن',
+
+                                                                                                                       'طيزمك بزبي',
+
+                                                                                                                         'قطعمك',
+
+                                                                                                                           'قتل اهلمك',
+
+                                                                                                                             'ياولد جرار كسمك يبيله عير فرار', 
+
+                                                                                                                               'يبن لمخنثة',
+
+                                                                                                                                 'نيك عرضك',
+
+                                                                                                                                   ' كسشرف اهلك ',
+
+                                                                                                                                     'مضاجعه عرضك',
+
+                                                                                                                                       ' كسمين امك',
+
+                                                                                                                                         'نيك كسختمك',
+
+                                                                                                                                           'نيك اختك',
+
+                                                                                                                                             'نيك كسمك',
+
+                                                                                                                                               'زبي بكسمك',
+
+                                                                                                                                                 ' يبن القحبة ',
+
+                                                                                                                                                   ' يخو لدعارة ',
+
+                                                                                                                                                     'شلع جلدمك',
+
+                                                                                                                                                       'ذهول كسمك بعيري فولاذي',
+
+                                                                                                                                                         'اهانه امك',
+
+                                                                                                                                                           'انتهاك كسمك',
+
+                                                                                                                                                             ' كس اختك','انيكمك ', 
+
+                                                                                                                                                               'تديث كسمك',
+
+                                                                                                                                                                 'رجلي بكسمك ', 
+
+                                                                                                                                                                   'كسختك بزبي', 
+
+                                                                                                                                                                     'اشق كسعرضك', 
+
+                                                                                                                                                                       ' يبن الزانية', 
+
+                                                                                                                                                                         ' يبن لعرصة ', 
+
+                                                                                                                                                                           'يبن لفرخة', 
+
+                                                                                                                                                                             'يولد القحاب', 
+
+                                                                                                                                                                               'اشق كسمك', 
+
+                                                                                                                                                                                 'يبن لفاجرة', 
+
+                                                                                                                                                                                 'اعطى لامك الماوى',
+
+                                                                                                                                                                                 'اشرد اخواتك',
+
+                                                                                                                                                                                 'سحببة سحبتين ونيك امك فمرتين',
+
+                                                                                                                                                                                 'سكب الكحول بكسمك',
+
+                                                                                                                                                                                 'هروب كسمك',
+
+                                                                                                                                                                                 'رسسسسسسسسسسسسسسسسسسسسسميااااااا تم نيك امك',
+
+                                                                                                                                                                                 'هلع كسمك',
+'تسيحرمك', 
+                                                                                                                                                                                 'اقذف بكسختك',
+
+                                                                                                                                                                                 'بعصمك',
+
+                                                                                                                                                                                 
+
+        'رسسسسسسسسسسميااااااا موت امك ع زبي',
+
+                                                                                                                                                                                 'يبن سايحه ذيابه فوق زبي',
+
+                                                                                                                                                                                 'ذوبانمك',
+
+                                                                                                                            'تفتيشمك',                                                      'نكح كساسة اصلك',
+
+                                                                        'اقتلاع مصارين امك', 
+
+        
+
+       'قلع احشاء امك', 
+
+        
+
+            'شطر مهبل والدتك لشطرتين',     
+
+   'يبن المسدوحة', 
+
+     'تقطيع جسد والدتك', 
+
+        
+      'افتح كسختك', 
+         
+            'افتح كسستك', 
+
+            
+                    'نهش امك لشلالاء',
+
+                       'سرقة احشاء اختك وبيعهااااا لزبائن',
+
+      
+                              'تهكير كسمج',
+
+ 
+                                 'انفجاعختك',   
+
+
+                                   'كسخالتك زاكي', 
+
+       
+
+        
+
+        'انتحارمك',
+
+      
+
+        
+
+        'انصداممك', 
+
+        
+
+        
+
+        'يخو المنيوكة',        
+
+       
+
+        
+
+        'تطشير عرضج', 
+
+        
+
+        'سدح اختك',      
+
+     
+'اخزوق كسمك',  
+
+   
+
+        
+'صعقمك', 
+        
+
+        'تحريفمك بزبي', 
+
+     
+'نحرمك', 
+   
+            'انجابمك بالدعارة', 
+        
+
+ 'سحلمك',       
+
+ 
+
+        'اغتصاب عشيرتك',
+
+ 
+
+'ونكت اصلك با ولد الممحونة',
+
+'شق راسمج بالفأس',
+
+        
+
+        'زبي بكسمصلك',      
+
+        
+
+        'اختراق كسختك',
+
+        
+
+        'يبن المربوطة',
+
+'خطف كسمك',
+
+        
+
+        'توسيع كسختج',
+
+        
+
+'انشطار امج رسميااااا',
+
+        
+'اقتلاع جثة امك وتلصيقه بعيري', 
+        
+
+'نيكمك بزبي المغوار الفرار',
+
+        'نايك امك بزب الساحق الماحق',
+
+        
+
+'صنع قنبلة مؤقتة ودحسه بكسمك وانفجار امك', 
+
+        
+
+        'ضرب امج بمطوة',
+
+        'اصتياد كسمج بلمرصد',
+
+'عصر بزازل امك',
+
+        
+
+'كسم شرفك با ولد القحبة',
+
+ 'ظهوى عيات ع امك من كثر تكفيات', 
+
+'للف عيري بكس امك ياولد جرار', 
+
+'يولد الاموره اخلي كس امك ايقاع وطرب',
+
+'افتح كسختك', 
+
+'تم نتهاك شرفمج', 
+
+'احشي بكسمك عيور فتاكة',
+
+  'لكممك',      
+
+        'اشلل كسمك بزبي',
+
+' امك تتناك مليون مرة باليوم',
+
+'تزوير زبي و دخول نسخته بكس اختج',
+
+'يبن الحازقة',
+
+        
+'ألاعتداء ع والدتك', 
+
+       'شخلمك',     
+
+       
+
+        'قطع يد امك', 
+
+        
+
+        'نكح كسختك لدرجة الهلع',
+
+'حنطمك', 
+
+        'هبوطمك بالمضلة',
+
+' ضرب طيزختك بسرعة فلاش',
+
+'نكح امك بالبئر',
+
+       ',عدم شرفج',
+
+'تقبمك', 
+
+'افتح صرم امك', 
+
+'ادخال عيري ببطء فكسمك',
+
+'نيك امج بعمارة',
+
+'اذهلمك', 
+
+    'يبن العارية',
+
+       'اخلي خرزتمك تتناك', 
+
+'يين لزواني', 
+
+    
+
+'فرع كسمك', 
+
+           'تعنيفمك',  
+
+'تفجير رحم امك', 
+
+        'احلق بكسمج في سماء',
+
+                         'القذف بعينمك', 
+'كسمج الاسود',
+'دفعمك للهاوية','تكسير راسمك', 
+
+           
+'صلخمك','لعقمك',
+
+'تفجير كسمك بالاربجي',
+
+      'ادخال كسمك للجحيم',
+'لحسمك',
+        'سكسمك',
+               'التحرش بامك',
+                      'افخخ كسختمك', 
+                           'عير بطيزمك',
+                                   'يابن المنيوكة المفتوحة ياللي جيت انيكها لقيتها مملوحة', 
+                                           'سحر راسمك',
+                                                   'محنة امك',
+                                                         'جرح كسمك بالزجاج',
+                                                                      'تقليدمك',
+                                                                         'خليت امك تتمنى رحمة عيري',
+                                                                                              'يولد الموومس',
+                                                                                                        'تلكيعمك',
+                                                                                                              'خرقمك بقضييب عنيف',
+                                                                                                                               'موت كسمك وفرحة الجميع',
+                                                                                                                                              'قص سياقنمك واكلها',
+                                                                                                                                                            'اغتصبمك','دياثتمك',
+                                                                                                                                                                          'شلع جذور دياثه ودحسه بكسمك',
+                                                                                                                                                                                             'تفليش قبرمك',
+                                                                                                                                                                                                       'تلطيشمك',
+                                                                                                                                                                                                             'تطهير كسمج من الاوساخ',
+                                                                                                                                                                                                            'وانيك امك بعير نار',
+                                                                                                                                                                                                           'اختج ع عيري المجنونة',
+                                                                                                                                                                                                          'تطويعمك للفضاء',
+                                                                                                                                                                                                         'افتتاح امك بك الامكان',  
+                                                                                                                                                                                                        'كسمك فوق زبي', 
+                                                                                                                                                                                                       'وضع القضيب بيد اختك',
+                                                                                                                                                                                                      'زكمك','شحطمك', 
+                                                                                                                                                                                                     'دورانمك', 
+                                                                                                                                                                                                    'اكل مصارينمك', 
+                                                                                                                                                                                                  'شلع قلبمك', 
+                                                                                                                                                                                                 'بدمر عرضمك', 
+                                                                                                                                                                                                'انيكمك بالاردن',
+                                                                                                                                                                                              'ممارسة الجنس با والدتك', 
+                                                                                                                                                                        
+
+]; 
+
+const Bottleneck = require('bottleneck');
+
+const limiter = new Bottleneck({
+  minTime: delayBetweenReplies,
+  maxConcurrent: 5,
+  strategy: Bottleneck.strategy.OVERFLOW,
+});
+
+class AutoReplier {
+  constructor(client, targetChannel, targetUsers, randomReplies) {
+    this.client = client;
+    this.targetChannel = targetChannel;
+    this.targetUsers = targetUsers;
+    this.randomReplies = randomReplies;
+    this.limiter = limiter;
+    this.repliedMessageIds = new Set();
+    this.lastProcessedMessageId = null; // لتتبع آخر رسالة تم الرد عليها
+  }
+
+  async simulateTyping(channelId) {
+    try {
+      const headers = {
+        Authorization: mytoken[0],
+        'Content-Type': 'application/json',
+      };
+      const axios = require('axios').default;
+      await axios.post(`https://discord.com/api/v10/channels/${channelId}/typing`, {}, { headers, timeout: 15000 });
+      console.log(`Typing simulated in channel ${channelId}`);
+    } catch (error) {
+      console.error(`Error simulating typing: ${error.message}`);
+    }
+  }
+
+  async replyToMessage(client, message) {
+    try {
+      for (let i = 0; i < this.randomReplies.length; i++) { 
+        const randomReply = this.randomReplies[i];
+        await this.limiter.schedule(async () => {
+          let attempts = 0;
+          const maxAttempts = 5;// تحكم فعدد ارسال اكثر من رسالة
+          const baseDelay = 5000;
+          while (attempts < maxAttempts) {
+            try {
+              await client.createMessage(message.channel.id, {
+                content: randomReply,
+                message_reference: { message_id: message.id },
+                allowedMentions: { repliedUser: true },
+              });
+              console.log(`Replied to message ID ${message.id} with: ${randomReply}`);
+              this.repliedMessageIds.add(message.id);
+              this.lastProcessedMessageId = message.id; // تحديث آخر رسالة تم الرد عليها
+              await new Promise((resolve) => setTimeout(resolve, 20));
+              break;
+            } catch (error) {
+              attempts++;
+              const delay = baseDelay * attempts;
+              if (error.status === 429) {
+                const retryAfter = error.response.headers['retry-after'] || 10;
+                console.log(`Rate limit reached. Retrying after ${retryAfter} seconds...`);
+                await new Promise((resolve) => setTimeout(resolve, (parseInt(retryAfter) + 1) * 1000));
+              } else if (['ECONNABORTED', 'ENOTFOUND', 'ETIMEDOUT'].includes(error.code)) {
+                console.log(`Network error, attempt ${attempts}/${maxAttempts}. Retrying in ${delay / 1000} seconds...`);
+                await new Promise((resolve) => setTimeout(resolve, delay));
+              } else {
+                console.error(`Failed to reply to message ID ${message.id} due to unexpected error: ${error.message}`);
+                break;
+              }
+              if (attempts === maxAttempts) {
+                console.error(`Max retry attempts reached for message ID ${message.id}. Skipping this message.`);
+              }
+            }
+          }
+        });
+        await new Promise((resolve) => setTimeout(resolve, 20)); 
+      }
+    } catch (error) {
+      console.error(`Unexpected error in replyToMessage: ${error.message}`);
+    }
+  }
+
+  async fetchMessagesSince(client, channelId, lastMessageId) {
+    try {
+      const options = lastMessageId ? { after: lastMessageId, limit: 100 } : { limit: 100 };
+      const messages = await client.getMessages(channelId, options);
+      return messages.reverse(); // عكس الترتيب لبدء الرد من الأقدم إلى الأحدث
+    } catch (error) {
+      console.error(`Error fetching messages from channel ${channelId}: ${error.message}`);
+      return [];
+    }
+  }
+
+  async handleMessages() {
+    this.client.on('ready', async () => {
+      console.log(`Logged in as ${this.client.user.username}#${this.client.user.discriminator}`);
+      
+      while (true) {
+        const messages = await this.fetchMessagesSince(
+          this.client,
+          this.targetChannel,
+          this.lastProcessedMessageId
+        );
+
+        for (let message of messages) {
+          if (!this.repliedMessageIds.has(message.id) && this.targetUsers.includes(message.author.id)) {
+            await this.simulateTyping(message.channel.id);
+            await this.replyToMessage(this.client, message);
+          }
+        }
+
+        await new Promise((resolve) => setTimeout(resolve, 20)); 
+      }
+    });
+
+    this.client.on('messageCreate', async (message) => {
+      const isTargetChannel = this.targetChannel === message.channel.id;
+      const isTargetUser = this.targetUsers.includes(message.author.id);
+
+      if (isTargetChannel && isTargetUser && !this.repliedMessageIds.has(message.id)) {
+        await this.simulateTyping(message.channel.id);
+        await this.replyToMessage(this.client, message);
+      }
+    });
+  }
+}
+
+const Eris = require('eris');
+
+mytoken.forEach((token) => {
+  const client = new Eris(token);
+  client.connect();
+
+  const autoReplier = new AutoReplier(client, targetChannel, targetUsers, randomReplies);
+  autoReplier.handleMessages();
+});
+const express = require('express');
+const http = require('http');
+const app = express();
+app.get("/", (req, res) => {
+  res.send(`
+  <body>
+    <center><h1>كسختو لحن</h1></center>
+  </body>`);
+});
+
+setInterval(() => {
+  const now = new Date();
+  console.log(now.toLocaleTimeString());
+}, 1000);
+
+const server = http.createServer((req, res) => {
+  res.setHeader('Content-Type', 'text/html');
+  res.end(`
+    <html>
+      <head>
+        <title>كسختو دارك</title>
+      </head>
+      <body style="margin: 0; padding: 0;">
+        <iframe width="100%" height="100%" src="https://axocoder.vercel.app/" frameborder="0" allowfullscreen></iframe>
+      </body>
+    </html>`);
+});
+
+server.listen(8080, () => {
+  console.log('I!!m ready nik ksm l7n..24H!!');
+  app.listen(3000, () => console.log("I!!m Ready To nik ksm dark..! 24H"));
+});
+
