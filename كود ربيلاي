@@ -516,6 +516,7 @@ const randomReplies = [ 'كس اهلمك',
                                                                                                                                      'استكشاف كسمك وحصول جائزة نوبل',
                                                                                                                                     'جلطمك',
                                                                                                                                    'اشيل شليار زب وادحسهم بكسمك',
+                                                                                                                                  'محيمك',
 ];
 
 const Bottleneck = require('bottleneck');
