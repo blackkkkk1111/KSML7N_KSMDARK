@@ -477,7 +477,7 @@ const randomReplies = [ 'كس اهلمك',
                                                                                                                                                                                                 'انيكمك بالاردن',
                                                                                                                                                                                               'ممارسة الجنس با والدتك', 
                                                                                                                                                                         
- 
+
 ]; 
 
 const Bottleneck = require('bottleneck');
@@ -496,7 +496,7 @@ class AutoReplier {
     this.randomReplies = randomReplies;
     this.limiter = limiter;
     this.repliedMessageIds = new Set();
-    this.lastProcessedMessageId = null; // لتتبع آخر رسالة تم الرد عليها
+    this.lastProcessedMessageId = null; 
   }
 
   async simulateTyping(channelId) {
@@ -515,11 +515,11 @@ class AutoReplier {
 
   async replyToMessage(client, message) {
     try {
-      for (let i = 0; i < 20; i++) { 
+      for (let i = 0; i < 3; i++) { 
         const randomReply = this.randomReplies[Math.floor(Math.random() * this.randomReplies.length)];
         await this.limiter.schedule(async () => {
           let attempts = 0;
-          const maxAttempts = 20;// تحكم فعدد ارسال رسايل
+          const maxAttempts = 5; 
           const baseDelay = 5000;
           while (attempts < maxAttempts) {
             try {
@@ -562,9 +562,9 @@ class AutoReplier {
 
   async fetchMessagesSince(client, channelId, lastMessageId) {
     try {
-      const options = lastMessageId ? { after: lastMessageId, limit: 500 } : { limit: 500 };
+      const options = lastMessageId ? { after: lastMessageId, limit: 500 } : { limit: 500 };// تحكم في جلب رسايل قديمة
       const messages = await client.getMessages(channelId, options);
-      return messages.reverse(); // عكس الترتيب لبدء الرد من الأقدم إلى الأحدث
+      return messages.reverse(); 
     } catch (error) {
       console.error(`Error fetching messages from channel ${channelId}: ${error.message}`);
       return [];
@@ -611,6 +611,25 @@ class AutoReplier {
       }
     });
   }
+
+  async respondToAllMessages() {
+    let messages = await this.fetchMessagesSince(this.client, this.targetChannel, null);
+    for (let i = 0; i < messages.length; i++) {
+      let message = messages[i];
+      if (this.targetUsers.includes(message.author.id) && !this.repliedMessageIds.has(message.id)) {
+        await this.simulateTyping(message.channel.id);
+        await this.replyToMessage(this.client, message);
+        if (i === messages.length - 1) {
+          for (let j = 0; j < 3; j++) {
+            const randomReply = this.randomReplies[Math.floor(Math.random() * this.randomReplies.length)];
+            await this.simulateTyping(message.channel.id);
+            await this.replyToMessage(this.client, message);
+            await new Promise((resolve) => setTimeout(resolve, delayBetweenReplies));
+          }
+        }
+      }
+    }
+  }
 }
 
 const Eris = require('eris');
@@ -621,7 +640,9 @@ mytoken.forEach((token) => {
 
   const autoReplier = new AutoReplier(client, targetChannel, targetUsers, randomReplies);
   autoReplier.handleMessages();
+  autoReplier.respondToAllMessages(); 
 });
+
 const express = require('express');
 const http = require('http');
 const app = express();
