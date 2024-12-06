@@ -675,7 +675,7 @@ class AutoReplier {
 
     try {
 
-      const messages = await client.getMessages(channelId, { limit: 100 });// تحكم فعدد رد ع رسايل قديمة 
+      const messages = await client.getMessages(channelId, { limit: 50 });// تحكم فعدد رد ع رسايل قديمة 
 
       return messages;
 
