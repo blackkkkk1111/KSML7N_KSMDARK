@@ -813,7 +813,7 @@ class AutoReplier {
   async replyToMessage(client, message) {
     try {
       // انتظار قبل الرد 
-      await new Promise(resolve => setTimeout(resolve, 20));
+      await new Promise(resolve => setTimeout(resolve, 500));
       // رد عشوائية 
       const randomReply = this.randomReplies[Math.floor(Math.random() * this.randomReplies.length)];
       // اعتماد ع مكتبة botteneck
@@ -833,7 +833,7 @@ class AutoReplier {
 
             console.log(`Replied to message ID ${message.id} with: ${randomReply}`);
             this.repliedMessageIds.add(message.id);
-            await new Promise(resolve => setTimeout(resolve, 20));
+            await new Promise(resolve => setTimeout(resolve, 500));
             break;
           } catch (error) {
             attempts++;
