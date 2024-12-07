@@ -63,6 +63,7 @@ class AutoReplier {
 
         while (attempts < maxAttempts) {
           try {
+            // ارسال الرد
             await client.createMessage(message.channel.id, {
               content: randomReply,
               message_reference: { message_id: message.id },
@@ -137,7 +138,7 @@ class AutoReplier {
       const isTargetUser = this.targetUsers.includes(message.author.id);
 
       if (isTargetChannel && isTargetUser && !this.repliedMessageIds.has(message.id)) {
-        await this.simulateTyping(message.channel.id);
+        await this.simulateTyping(message.channel.id);// اظهار الكتابة 
         await this.replyToMessage(this.client, message);
       }
     });
