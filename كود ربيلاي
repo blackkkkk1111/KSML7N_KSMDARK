@@ -1,315 +1,189 @@
 const mytoken = [
-
   "" 
-
 ];// ضع التوكن هنا
 
 const targetUsers = [
-
   "" 
-
 ];// ضع معرفات المستخدمين المستهدفين هنا
 
 const targetChannels = [
-
   "" 
-
 ];// ضع معرفات القنوات المستهدفة هنا
 
 const delayBetweenReplies = 200; // التحكم في سرعة إرسال الردود
 
-const randomReplies = [                                                                                                        'صفقمك', 
+const randomReplies = [
+ 
 ];
 
 const Bottleneck = require('bottleneck');
 
 const limiter = new Bottleneck({
-
   minTime: delayBetweenReplies,
-
   maxConcurrent: 5,
-
   strategy: Bottleneck.strategy.OVERFLOW,
-
 });
 
 class AutoReplier {
-
   constructor(client, targetChannels, targetUsers, randomReplies) {
-
     this.client = client;
-
     this.targetChannels = targetChannels;
-
     this.targetUsers = targetUsers;
-
     this.randomReplies = randomReplies;
-
     this.limiter = limiter;
-
     this.repliedMessageIds = new Set();
-
   }
-
+  
   async simulateTyping(channelId) {
-
     try {
-
       const headers = {
-
         'Authorization': mytoken[0],
-
         'Content-Type': 'application/json',
-
       };
 
       const axios = require('axios').default;
-
       await axios.post(`https://discord.com/api/v10/channels/${channelId}/typing`, {}, { headers, timeout: 15000 });
-
       console.log(`Typing simulated in channel ${channelId}`);
-
     } catch (error) {
-
       console.error(`Error simulating typing: ${error.message}`);
-
     }
-
   }
 
   async replyToMessage(client, message) {
-
     try {
-
-      // انتضار عند الرد 
-
+      // انتظار قبل الرد 
       await new Promise(resolve => setTimeout(resolve, 20));
-
-      // اختيار رد عشوائي 
-
+      // رد عشوائية 
       const randomReply = this.randomReplies[Math.floor(Math.random() * this.randomReplies.length)];
-
-      // اعتماد ع bottleneck
-
+      // اعتماد ع مكتبة botteneck
       await this.limiter.schedule(async () => {
-
         let attempts = 0;
-
         const maxAttempts = 5;
-
         const baseDelay = 5000;
 
         while (attempts < maxAttempts) {
-
           try {
-
-            // ارسال رد
-
             await client.createMessage(message.channel.id, {
-
               content: randomReply,
-
               message_reference: { message_id: message.id },
-
               allowedMentions: { repliedUser: true },
-
             });
 
             console.log(`Replied to message ID ${message.id} with: ${randomReply}`);
-
             this.repliedMessageIds.add(message.id);
-
             await new Promise(resolve => setTimeout(resolve, 20));
-
             break;
-
           } catch (error) {
-
             attempts++;
-
             const delay = baseDelay * attempts;
 
             if (error.status === 429) {
-
               const retryAfter = error.response.headers['retry-after'] || 10;
-
               console.log(`Rate limit reached. Retrying after ${retryAfter} seconds...`);
-
               await new Promise(resolve => setTimeout(resolve, (parseInt(retryAfter) + 1) * 1000));
-
             } else if (['ECONNABORTED', 'ENOTFOUND', 'ETIMEDOUT'].includes(error.code)) {
-
               console.log(`Network error, attempt ${attempts}/${maxAttempts}. Retrying in ${delay / 1000} seconds...`);
-
-              await new Promise(resolve => setTimeout(resolve, delay));// تصحيح الاخطأا
-
+              await new Promise(resolve => setTimeout(resolve, delay));// اعادة محاولة في حدوث الخطأ
             } else {
-
               console.error(`Failed to reply to message ID ${message.id} due to unexpected error: ${error.message}`);
-
               break;
-
             }
 
             if (attempts === maxAttempts) {
-
               console.error(`Max retry attempts reached for message ID ${message.id}. Skipping this message.`);
-
             }
-
           }
-
         }
-
       });
-
     } catch (error) {
-
       console.error(`Unexpected error in replyToMessage: ${error.message}`);
-
     }
-
   }
 
-  async fetchLastMessages(client, channelId) {
-
+  async fetchLastMessages(client) {
     try {
-
-      const messages = await client.getMessages(channelId, { limit: 50 });// تحكم فعدد رد ع رسايل قديمة 
-
-      return messages;
-
+      const allMessages = [];
+      for (let channelId of this.targetChannels) {
+        const messages = await client.getMessages(channelId, { limit: 100 });// تحكم فعدد ارسال رد ع رسايل قديمة 
+        allMessages.push(...messages);
+      }
+      return allMessages;
     } catch (error) {
-
-      console.error(`Error fetching messages from channel ${channelId}: ${error.message}`);
-
+      console.error(`Error fetching messages: ${error.message}`);
       return [];
-
     }
-
   }
 
   async handleMessages() {
-
     this.client.on('ready', async () => {
-
       console.log(`Logged in as ${this.client.user.username}#${this.client.user.discriminator}`);
 
-      for (let channelId of this.targetChannels) {
+      const messages = await this.fetchLastMessages(this.client);
+      const replyPromises = [];
 
-        const messages = await this.fetchLastMessages(this.client, channelId);
-
-        const replyPromises = [];
-
-        for (let message of messages) {
-
-          if (!this.repliedMessageIds.has(message.id) && this.targetUsers.includes(message.author.id)) {
-
-            await this.simulateTyping(message.channel.id);
-
-            const replyPromise = this.replyToMessage(this.client, message);
-
-            replyPromises.push(replyPromise);
-
-          }
-
+      for (let message of messages) {
+        if (!this.repliedMessageIds.has(message.id) && this.targetUsers.includes(message.author.id)) {
+          await this.simulateTyping(message.channel.id);
+          const replyPromise = this.replyToMessage(this.client, message);
+          replyPromises.push(replyPromise);
         }
-
-        await Promise.all(replyPromises);
-
       }
 
+      await Promise.all(replyPromises);
     });
 
     this.client.on('messageCreate', async (message) => {
-
       const isTargetChannel = this.targetChannels.includes(message.channel.id);
-
       const isTargetUser = this.targetUsers.includes(message.author.id);
 
       if (isTargetChannel && isTargetUser && !this.repliedMessageIds.has(message.id)) {
-
         await this.simulateTyping(message.channel.id);
-
         await this.replyToMessage(this.client, message);
-
       }
-
     });
-
   }
-
 }
 
 const Eris = require('eris');
 
 mytoken.forEach(token => {
-
   const client = new Eris(token);
-
   client.connect();
 
   const autoReplier = new AutoReplier(client, targetChannels, targetUsers, randomReplies);
-
   autoReplier.handleMessages();
-
 });
 
 const express = require('express');
-
 const http = require('http');
-
 const app = express();
 
 app.get("/", (req, res) => {
-
   res.send(`
-
   <body>
-
     <center><h1>كسختو لحن</h1></center>
-
   </body>`);
-
 });
 
 setInterval(() => {
-
   const now = new Date();
-
   console.log(now.toLocaleTimeString());
-
 }, 1000);
 
 const server = http.createServer((req, res) => {
-
   res.setHeader('Content-Type', 'text/html');
-
   res.end(`
-
     <html>
-
       <head>
-
         <title>كسختو دارك</title>
-
       </head>
-
       <body style="margin: 0; padding: 0;">
-
         <iframe width="100%" height="100%" src="https://axocoder.vercel.app/" frameborder="0" allowfullscreen></iframe>
-
       </body>
-
     </html>`);
-
 });
 
 server.listen(8080, () => {
-
   console.log('I!!m ready nik ksm l7n..24H!!');
-
   app.listen(3000, () => console.log("I!!m Ready To nik ksm dark..! 24H"));
-
 });
-
