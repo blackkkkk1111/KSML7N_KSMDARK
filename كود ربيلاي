@@ -411,7 +411,7 @@ class AutoReplier {
     try {
       const allMessages = [];
       for (let channelId of this.targetChannels) {
-        const messages = await client.getMessages(channelId, { limit: 100 });// تحكم فعدد ارسال رد ع رسايل قديمة 
+        const messages = await client.getMessages(channelId, { limit: 50 });// تحكم فعدد ارسال رد ع رسايل قديمة 
         allMessages.push(...messages);
       }
       return allMessages;
