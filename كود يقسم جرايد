@@ -1,0 +1,90 @@
+const axios = require('axios');
+
+const mytoken = '';// توكن
+
+const channelId = '';// قناة مستهدفه
+
+const longText = 'رسالتك هنااا';
+
+const delayBetweenMessages = 1000; // تحكم في سرعة  ارسال
+
+function splitText(text, maxSize) {
+    const parts = [];
+    for (let i = 0; i < text.length; i += maxSize) {
+        parts.push(text.slice(i, i + maxSize));
+    }
+    return parts;
+}
+
+function delay(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function sendSplitText(text) {
+    const parts = splitText(text, 2000);
+
+    for (const part of parts) {
+        let success = false;
+        let retries = 3;
+
+        while (!success && retries > 0) {
+            try {
+                await axios.post(`https://discord.com/api/v9/channels/${channelId}/messages`,
+                    { content: part },
+                    { headers: { Authorization: mytoken } }
+                );
+                success = true;
+                console.log('تم إرسال جزء بنجاح');
+            } catch (error) {
+                if (error.response?.status === 429) {
+                    const retryAfter = error.response.data.retry_after || 1000;
+                    console.warn(`تجاوزت الحد المسموح. إعادة المحاولة بعد ${retryAfter} مللي ثانية.`);
+                    await delay(retryAfter);
+                } else {
+                    console.error('خطأ أثناء الإرسال:', error.response?.data || error.message);
+                }
+                retries--;
+                if (retries === 0) {
+                    console.error('فشل الإرسال بعد عدة محاولات.');
+                }
+            }
+        }
+        await delay(delayBetweenMessages); // تأخير بين الرسائل
+    }
+}
+
+sendSplitText(longText);
+
+const express = require('express');
+const http = require('http');
+const app = express();
+app.get("/", (req, res) => {
+  res.send(`
+  <body>
+    <center><h1>كسختو لحن</h1></center>
+  </body>`);
+});
+
+setInterval(() => {
+  const now = new Date();
+  console.log(now.toLocaleTimeString());
+}, 1000);
+
+const server = http.createServer((req, res) => {
+  res.setHeader('Content-Type', 'text/html');
+  res.end(`
+    <html>
+      <head>
+        <title>كسختو دارك</title>
+      </head>
+      <body style="margin: 0; padding: 0;">
+        <iframe width="100%" height="100%" src="https://axocoder.vercel.app/" frameborder="0" allowfullscreen></iframe>
+      </body>
+    </html>`);
+});
+
+server.listen(8080, () => {
+  console.log('I!!m ready nik ksm l7n..24H!!');
+  app.listen(3000, () => console.log("I!!m Ready To nik ksm dark..! 24H"));
+});
+
