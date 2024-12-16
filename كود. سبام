@@ -1,27 +1,31 @@
-const myTOKEN =
-""; // توكنك
+const myTOKEN = 
+"";
+ // توكنك
 
+const messageContent =
+ "";
 
-const messageContent = ""; 
+ // سبام تبعك
 
-// سبام تبعك
+let currentGroupIndex = 0
 
-let currentGroupIndex = 0;
-const intervalBetweenMessages = 3000; // تحكم في سرعة تكررة رسالة
-
+const intervalBetweenMessages = 3000;
+ // تحكم في سرعة تكرار الرسالة
 
 const groupIds = [
-""   
-    
-];// وضع ايديات قروبات/ رومات سيرفر مستهدفه
+"" 
+
+];// وضع ايديات قروبات/رومات سيرفر مستهدفة
 
 const { Client } = require('eris');
 const client = new Client(myTOKEN);
+
 
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.username}#${client.user.discriminator}`);
     sendRequest();
 });
+
 
 async function sendRequest() {
     const currentGroupId = groupIds[currentGroupIndex];
@@ -53,10 +57,12 @@ function handleErrors(error, currentGroupId) {
     moveToNextGroup();
 }
 
+
 function moveToNextGroup() {
     currentGroupIndex = (currentGroupIndex + 1) % groupIds.length;
     setTimeout(sendRequest, intervalBetweenMessages);
 }
+
 
 async function sendMessages(tokens, channelIds) {
     const promises = [];
@@ -67,6 +73,7 @@ async function sendMessages(tokens, channelIds) {
     }
     await Promise.all(promises);
 }
+
 
 async function sendMessageWithTokenAndChannel(token, channelId) {
     try {
@@ -79,24 +86,26 @@ async function sendMessageWithTokenAndChannel(token, channelId) {
     }
 }
 
+
 const express = require('express');
 const http = require('http');
 const app = express();
 app.get("/", (req, res) => {
-  res.send(`
-  <body>
-    <center><h1>كسختو لحن</h1></center>
-  </body>`);
+    res.send(`
+    <body>
+      <center><h1>كسختو لحن</h1></center>
+    </body>`);
 });
 
+
 setInterval(() => {
-  const now = new Date();
-  console.log(now.toLocaleTimeString());
+    const now = new Date();
+    console.log(now.toLocaleTimeString());
 }, 1000);
 
 const server = http.createServer((req, res) => {
-  res.setHeader('Content-Type', 'text/html');
-  res.end(`
+    res.setHeader('Content-Type', 'text/html');
+    res.end(`
     <html>
       <head>
         <title>كسختو دارك</title>
@@ -108,8 +117,12 @@ const server = http.createServer((req, res) => {
 });
 
 server.listen(8080, () => {
-  console.log('I!!m ready nik ksm l7n..24H!!');
-  app.listen(3000, () => console.log("I!!m Ready To nik ksm dark..! 24H"));
+    console.log('I!!m ready nik ksm l7n..24H!!');
+    app.listen(3000, () => console.log("I!!m Ready To nik ksm dark..! 24H"));
+});
+client.on('disconnect', () => {
+    console.log('تم قطع الاتصال. إعادة المحاولة بعد 30 ميلي ثانية...');
+    setTimeout(() => client.connect(), 30);
 });
 
 client.connect();
