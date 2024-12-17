@@ -1,31 +1,32 @@
-const token =
- ""; // ضع التوكن هنا
+const mytoken = 
+"";
+ // ضع التوكن هنا
+
 
 const groupNames = [
-  "",
-  "",
+"", 
+"", 
 ]; 
+
 
 // تغير اسم قروب اكثر من مرة
 
 
 const targetChannels = [
-  ""
-]; // ايديات قروبات مستهدفة
+"" 
+]; // أضف معرفات القنوات هنا
 
-const Eris = require('eris');
-const client = new Eris(token);
 
 const Bottleneck = require('bottleneck');
 const limiter = new Bottleneck({
   minTime: 30, 
-
   maxConcurrent: 2,
-  
   strategy: Bottleneck.strategy.OVERFLOW,
 });
 
-let nextGroupNumbers = {};
+const Eris = require('eris');
+const client = new Eris(mytoken);
+
 
 const getRandomGroupName = () => {
   const randomName = groupNames[Math.floor(Math.random() * groupNames.length)];
@@ -38,8 +39,8 @@ const changeChannelName = async (channelId, newGroupName) => {
     await limiter.schedule(() => client.editChannel(channelId, { name: newGroupName }));
     console.log(`تم تغيير اسم القروب ${channelId} إلى: ${newGroupName}`);
   } catch (error) {
-    console.error(`فشل لتغيير اسم القروب ${channelId}: ${error.message}`);
-    if (error.code === 429) { 
+    console.error(`فشل تغيير اسم القروب ${channelId}: ${error.message}`);
+    if (error.code === 429) {
       const retryAfter = parseInt(error.response?.headers['retry-after']) || 10;
       console.error(`تم تجاوز الحد، الانتظار لمدة ${retryAfter} ثانية.`);
       await new Promise(resolve => setTimeout(resolve, retryAfter * 1000));
@@ -62,8 +63,6 @@ const changeChannelsPeriodically = async () => {
     await new Promise(resolve => setTimeout(resolve, 900)); 
   }
 };
-
-changeChannelsPeriodically().catch(console.error);
 
 const express = require('express');
 const http = require('http');
@@ -100,6 +99,13 @@ server.listen(8080, () => {
 
 client.on('ready', () => {
   console.log(`تم تسجيل الدخول كـ ${client.user.username}#${client.user.discriminator}`);
+  changeChannelsPeriodically().catch(console.error);
 });
+
+client.on('disconnect', () => {
+  console.log('تم قطع الاتصال. إعادة المحاولة بعد 30 ميلي ثانية...');
+  setTimeout(() => client.connect(), 30);
+});
+
 
 client.connect();
