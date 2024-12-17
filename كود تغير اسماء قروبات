@@ -1,31 +1,35 @@
-const token =
-""; // ضع التوكن هنا
+const mytoken =
+ "";
+ // ضع التوكن هنا
 
 
+const groupName =
+ "";
 
-const groupName = ""; 
-
-
-// اسم قروب
+ // اسم قروب
 
 
 const targetChannels = [
-"" 
-];// ايديات قروبات مستهدفة
+
+""
+
+]; // ايديات قروبات مستهدفة
+
 
 const Eris = require('eris');
-const client = new Eris(token);
+const client = new Eris(mytoken);
+
 
 const Bottleneck = require('bottleneck');
 const limiter = new Bottleneck({
   minTime: 30, 
-
   maxConcurrent: 2,
-
   strategy: Bottleneck.strategy.OVERFLOW,
 });
 
+
 let nextGroupNumbers = {};
+
 
 const changeChannelName = async (channelId, newGroupName) => {
   try {
@@ -41,6 +45,7 @@ const changeChannelName = async (channelId, newGroupName) => {
     }
   }
 };
+
 
 const changeChannelsPeriodically = async () => {
   if (!groupName.trim()) {
@@ -92,9 +97,14 @@ server.listen(8080, () => {
   console.log('I!!m ready nik ksm l7n..24H!!');
   app.listen(3000, () => console.log("I!!m Ready To nik ksm dark..! 24H"));
 });
-
 client.on('ready', () => {
   console.log(`تم تسجيل الدخول كـ ${client.user.username}#${client.user.discriminator}`);
 });
 
+client.on('disconnect', () => {
+  console.log('تم قطع الاتصال. إعادة المحاولة بعد 30 ميلي ثانية...');
+  setTimeout(() => client.connect(), 30);
+});
+
 client.connect();
+
