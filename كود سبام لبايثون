@@ -1,0 +1,82 @@
+!pip install Flask
+!pip install aiohttp
+!pip install nest_asyncio
+!pip install requests
+from flask import Flask
+from threading import Thread
+import random
+import time
+import aiohttp
+import asyncio
+import logging
+import nest_asyncio
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
+nest_asyncio.apply()
+
+TOKEN = '' # توكن
+channel_ids = [
+    '',  
+] #ايدي قنوات مستهدفه 
+
+message = ''  
+
+# سبامك
+send_speed = 5  # تحكم بسرعة السبام
+
+def set_send_speed(speed: float):
+    global send_speed
+    send_speed = speed
+    logging.info(f"تم تغيير سرعة إرسال الرسائل إلى {send_speed} ثانية.")
+
+async def send_message(session, channel_id):
+    url = f'https://discord.com/api/v9/channels/{channel_id.strip()}/messages'
+    headers = {
+        'Authorization': TOKEN,       
+    }
+    data = {
+        'content': message
+    }
+    
+    async with session.post(url, headers=headers, json=data) as response:
+        if response.status == 200:
+            logging.info(f'تم إرسال الرسالة إلى القناة {channel_id.strip()} بنجاح!')
+        elif response.status == 429:
+            retry_after = int(response.headers.get('Retry-After', 1))  
+            logging.warning(f'معدل الطلبات مرتفع. الانتظار لمدة {retry_after} ثانية...')
+            await asyncio.sleep(retry_after)  
+            await send_message(session, channel_id)  
+        else:
+            logging.error(f'فشل في إرسال الرسالة إلى القناة {channel_id.strip()}: {response.status} {await response.text()}')
+
+async def send_messages():
+    async with aiohttp.ClientSession() as session:
+        while True:
+            for channel_id in channel_ids:
+                await send_message(session, channel_id)
+                await asyncio.sleep(send_speed)
+
+app = Flask(__name__)
+
+@app.route('/')
+def index():
+    return '''<body style="margin: 0; padding: 0;">
+    <iframe width="100%" height="100%" src="https://axocoder.vercel.app/" frameborder="0" allowfullscreen></iframe>
+  </body>'''
+
+def run():
+    app.run(host='0.0.0.0', port=8080, use_reloader=False)
+
+def keep_alive():  
+    t = Thread(target=run)
+    t.start()
+
+if __name__ == '__main__':
+    try:
+        keep_alive()
+        set_send_speed(send_speed)
+        asyncio.run(send_messages())
+        logging.info("I'm ready nik ksm l7n..24H!")
+    except KeyboardInterrupt:
+        logging.info("تم إيقاف البرنامج.")
