@@ -12,7 +12,7 @@ nest_asyncio.apply()
 
 TOKEN = ''  # توكن
 CHANNEL_IDS = ['']  # معرفات القنوات المستهدفة
-TARGET_USER_IDS = ['','']  # معرفات المستخدمين المستهدفين
+TARGET_USER_IDS = ['']  # معرفات المستخدمين المستهدفين
 messages = [
 
 'كس اهلك',
